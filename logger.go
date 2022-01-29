@@ -3,6 +3,7 @@ package logging
 import (
 	"io"
 	"os"
+	"sync"
 
 	"github.com/juicesix/rolling"
 	"go.uber.org/zap"
@@ -41,6 +42,33 @@ var (
 	_jsonDataLogger *Logger
 	hostIP          string
 )
+
+// Logger name for default loggers
+const (
+	DefaultLoggerName = "_default"
+	SlowLoggerName    = "_slow"
+	GenLoggerName     = "_gen"
+	CrashLoggerName   = "_crash"
+	BalanceLoggerName = "_balance"
+)
+
+func init() {
+	_defaultLogger = New()
+	logs[DefaultLoggerName] = _defaultLogger
+	logs[SlowLoggerName] = slowlog
+	logs[GenLoggerName] = genlog
+	logs[CrashLoggerName] = crashlog
+	logs[BalanceLoggerName] = balancelog
+}
+
+var logs = map[string]*Logger{}
+var logsMtx sync.RWMutex
+
+func Log(name string) *Logger {
+	logsMtx.RLock()
+	defer logsMtx.RUnlock()
+	return logs[name]
+}
 
 func New() *Logger {
 	cfg := defaultEncoderConfig
