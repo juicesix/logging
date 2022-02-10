@@ -84,3 +84,47 @@ func New() *Logger {
 		encoderCfg:    cfg,
 	}
 }
+
+func Info(v ...interface{}) {
+	_defaultLogger.Info(v...)
+}
+
+func Warn(v ...interface{}) {
+	_defaultLogger.Warn(v...)
+}
+
+func Warning(v ...interface{}) {
+	_defaultLogger.Warn(v...)
+}
+
+func Error(v ...interface{}) {
+	_defaultLogger.Error(v...)
+}
+
+func Fatal(v ...interface{}) {
+	_defaultLogger.Fatal(v...)
+}
+
+func Debugf(format string, v ...interface{}) {
+	_defaultLogger.Debugf(format, v...)
+}
+
+func Infof(format string, v ...interface{}) {
+	_defaultLogger.Infof(format, v...)
+}
+
+func Warnf(format string, v ...interface{}) {
+	_defaultLogger.Warnf(format, v...)
+}
+
+func Warningf(format string, v ...interface{}) {
+	_defaultLogger.Warnf(format, v...)
+}
+
+func Errorf(format string, v ...interface{}) {
+	_defaultLogger.Errorf(format, v...)
+}
+
+func Fatalf(format string, v ...interface{}) {
+	_defaultLogger.Fatalf(format, v...)
+}
