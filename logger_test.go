@@ -99,5 +99,3 @@ func TestMillSecondTimeEncoder_Second(t *testing.T) {
 	}
 
 }
-
-// 针对上面例子多写一个针对毫秒的测试用例
