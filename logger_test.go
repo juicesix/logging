@@ -83,3 +83,21 @@ func TestMillSecondTimeEncoder(t *testing.T) {
 		t.Fatalf("unexpected encoded time: %q", enc.values[0])
 	}
 }
+
+// 针对秒级时间确认编码结果仍包含毫秒部分
+func TestMillSecondTimeEncoder_Second(t *testing.T) {
+	enc := &stringArrayEncoder{}
+	when := time.Date(2026, 4, 30, 9, 32, 45, 123456000, time.UTC)
+
+	MillSecondTimeEncoder(when, enc)
+
+	if len(enc.values) != 1 {
+		t.Fatalf("expected one encoded value, got %d", len(enc.values))
+	}
+	if enc.values[0] != "2026-04-30 09:32:45.123" {
+		t.Fatalf("unexpected encoded time: %q", enc.values[0])
+	}
+
+}
+
+// 针对上面例子多写一个针对毫秒的测试用例
