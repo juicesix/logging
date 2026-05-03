@@ -48,6 +48,15 @@ func TestDefaultLoggersAreRegistered(t *testing.T) {
 }
 
 func TestCommonLogOpenStatus(t *testing.T) {
+	wasOpen := checkOpenStatus()
+	t.Cleanup(func() {
+		if wasOpen {
+			OpenCommonLog()
+			return
+		}
+		CloseCommonLog()
+	})
+
 	OpenCommonLog()
 	if !checkOpenStatus() {
 		t.Fatal("expected common log to be open")
@@ -57,8 +66,6 @@ func TestCommonLogOpenStatus(t *testing.T) {
 	if checkOpenStatus() {
 		t.Fatal("expected common log to be closed")
 	}
-
-	OpenCommonLog()
 }
 
 func TestIsHourRotate(t *testing.T) {
@@ -84,22 +91,16 @@ func TestMillSecondTimeEncoder(t *testing.T) {
 	}
 }
 
-// 针对秒级时间确认编码结果仍包含毫秒部分
 func TestMillSecondTimeEncoder_Second(t *testing.T) {
 	enc := &stringArrayEncoder{}
-	when := time.Date(2026, 4, 30, 9, 32, 45, 123456000, time.UTC)
+	when := time.Date(2026, 4, 30, 9, 32, 45, 0, time.UTC)
 
 	MillSecondTimeEncoder(when, enc)
 
 	if len(enc.values) != 1 {
 		t.Fatalf("expected one encoded value, got %d", len(enc.values))
 	}
-	if enc.values[0] != "2026-04-30 09:32:45.123" {
+	if enc.values[0] != "2026-04-30 09:32:45.000" {
 		t.Fatalf("unexpected encoded time: %q", enc.values[0])
 	}
-
 }
-
-// 增加一行注释
-
-// git stash test
